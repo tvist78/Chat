@@ -8,9 +8,11 @@ public class Main {
 
    public static void main(String[] args) throws IOException {
 
+       
         try {
             int i = 1;
             ServerSocket serverSocket = new ServerSocket(12345);
+            
             while (true)
             {
                 Socket incoming = serverSocket.accept();
