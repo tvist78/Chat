@@ -12,7 +12,7 @@ public class Client {
 
 
     public Client(){
-         Client("127.0.0.1",8888);
+         this("127.0.0.1",8888);
     }
 
     public Client(String stringConnect, int portConnect){
