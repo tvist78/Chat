@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class Main {
 
    public static void main(String[] args) throws IOException {
+/*
 
        
         try {
@@ -17,7 +18,7 @@ public class Main {
             {
                 Socket incoming = serverSocket.accept();
                 System.out.println("Spawning " + i);
-                Runnable r = new TreadeEchoHandler(incoming);
+                Runnable r = new ThreadeEchoHandler(incoming);
                 Thread t = new Thread(r);
                 t.start();
                 i++;
@@ -31,10 +32,10 @@ public class Main {
 
     }
 
-    private static class TreadeEchoHandler implements Runnable {
+    private static class ThreadeEchoHandler implements Runnable {
         Socket incoming;
 
-        public TreadeEchoHandler(Socket in) {
+        public ThreadeEchoHandler(Socket in) {
             incoming = in;
         }
 
@@ -66,8 +67,9 @@ public class Main {
 
             }
 
-        }
+        }*/
     }
+
 
 }
 

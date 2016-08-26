@@ -3,13 +3,55 @@ package com.chat;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
-/**
- * Created by tvist on 23.08.16.
- */
-public class Server { public static final int PORT = 1510;
-    public static final int MAX_CLIENTS = 5;
-    public static final int TIME_OUT = 50000;
+
+public class Server {
+    private int PORT;
+    private boolean ActiveServer;
+    private ArrayList<Socket> ClientsList;
+
+
+    public Server() {
+        this.PORT = 1501;
+
+    }
+
+    public Server(int port) {
+
+        this.PORT = port;
+    }
+
+    public void Start (){
+        ActiveServer = true;
+        while (ActiveServer) {
+
+            try {
+                int i = 1;
+                ServerSocket serverSocket = new ServerSocket(12345);
+
+                while (true) {
+                    Socket incoming = serverSocket.accept();
+                    System.out.println("Spawning " + i);
+                    Runnable r = new ThreadeEchoHandler(incoming);
+                    Thread t = new Thread(r);
+                    t.start();
+                    i++;
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+
+    public void Stop(){
+
+    }
+    /*
+    private static final int PORT  = 9999;
 
     public static void main(String[] args) {
         ServerSocket ss = null;
@@ -68,7 +110,7 @@ public class Server { public static final int PORT = 1510;
                 System.err.println(e);
             }
         }
-    }
+    }*/
 }
 
 

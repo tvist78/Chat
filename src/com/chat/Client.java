@@ -2,9 +2,7 @@ package com.chat;
 
 import java.net.Socket;
 
-/**
- * Created by tvist on 19.05.16.
- */
+
 public class Client {
 
     private String stringConnect;
@@ -21,6 +19,6 @@ public class Client {
     }
 
     public void connect(){
-        Socket socketClient = new Socket();
+        Socket socket = new Socket();
     }
 }
