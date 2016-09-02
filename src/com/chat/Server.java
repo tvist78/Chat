@@ -3,7 +3,10 @@ package com.chat;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Scanner;
 
 
 public class Server {
@@ -20,35 +23,80 @@ public class Server {
     public Server(int port) {
 
         this.PORT = port;
+        ClientsList = new ArrayList<Socket>();
     }
 
     public void Start (){
         ActiveServer = true;
-        while (ActiveServer) {
+
 
             try {
-                int i = 1;
-                ServerSocket serverSocket = new ServerSocket(12345);
 
-                while (true) {
+                ServerSocket serverSocket = new ServerSocket(PORT);
+                while (ActiveServer) {
                     Socket incoming = serverSocket.accept();
-                    System.out.println("Spawning " + i);
-                    Runnable r = new ThreadeEchoHandler(incoming);
+                    if(!ActiveServer) break;
+
+                    Runnable r = new ThreadClient(incoming);
                     Thread t = new Thread(r);
                     t.start();
-                    i++;
                 }
+
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-        }
-
     }
 
     public void Stop(){
+    ActiveServer = false;
+        try {
+            new Socket("localhost",PORT);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private class ThreadClient implements Runnable {
+        private Socket incoming;
+        public ThreadClient(Socket incoming) {
+        this.incoming = incoming;
+        }
+
+     @Override
+    public void run(){
+         try {
+             try{
+             InputStream inputStream = incoming.getInputStream();
+             OutputStream outputStream = incoming.getOutputStream();
+
+             Scanner in = new Scanner(inputStream);
+
+             PrintWriter out = new PrintWriter(outputStream, true);
+
+             boolean done = false;
+             while (!done && in.hasNextLine()){
+                 String line = in.nextLine();
+                 out.println("Hello from Server -> " + line);
+                 if (line.trim().equals("bye")) done = true;
+                 if (line.trim().equals("time")) {
+                     Date now = new Date();
+                     out.write(now.toString() + "\r\n");
+                     out.flush();
+                 }
+             }
+             } finally {
+                 incoming.close();
+             }
+
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+     }
     }
     /*
     private static final int PORT  = 9999;
