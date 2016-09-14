@@ -10,7 +10,6 @@ public class Main {
 
        Server server = new Server(8888);
        server.Start();
-       server.Stop();
 /*
 
        

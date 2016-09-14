@@ -1,9 +1,10 @@
 package com.chat;
 
+import com.sun.org.apache.xml.internal.utils.StringToStringTableVector;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -63,25 +64,42 @@ public class Server {
 
     private class ThreadClient implements Runnable {
         private Socket incoming;
-        public ThreadClient(Socket incoming) {
+        private String nameClient;
+
+        Scanner in;
+        PrintWriter out;
+
+        ThreadClient(Socket incoming) {
+
         this.incoming = incoming;
+            //System.out.println("qwertt");
+
+        }
+
+        private void setNameClient(String name) {
+            if(name !=  null) {
+                this.nameClient = name;
+
+            } else this.nameClient = "Anonymous";
         }
 
      @Override
     public void run(){
          try {
              try{
-             InputStream inputStream = incoming.getInputStream();
-             OutputStream outputStream = incoming.getOutputStream();
-
-             Scanner in = new Scanner(inputStream);
-
-             PrintWriter out = new PrintWriter(outputStream, true);
 
              boolean done = false;
+
+                 out = new PrintWriter(incoming.getOutputStream(), true);
+                 out.println("Please, get your name ->");
+
+                 in = new Scanner(incoming.getInputStream());
+                 String name =  in.nextLine();
+                 setNameClient(name);
+                 out.println("Hello " + this.nameClient + " from Server");
              while (!done && in.hasNextLine()){
                  String line = in.nextLine();
-                 out.println("Hello from Server -> " + line);
+                 out.println("**" + line + "**");
                  if (line.trim().equals("bye")) done = true;
                  if (line.trim().equals("time")) {
                      Date now = new Date();
